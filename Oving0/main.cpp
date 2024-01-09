@@ -1,28 +1,16 @@
-//
-// This is example code from Chapter 2.2 "The classic first program" of
-// "Programming -- Principles and Practice Using C++" by Bjarne Stroustrup
-//
-// This program outputs the message "Hello, World!" to the monitor
-
+#include "AnimationWindow.h"
 #include "std_lib_facilities.h"
 
-//------------------------------------------------------------------------------'
-
-// C++ programs start by executing the function main
 int main() {
-    // Show a nice message in the Terminal window
-    cout << "Hello, World!" << endl;
-    string s;
-    cout << "Write me something:" << endl;
-    cin >> s;
-    cout << s << endl;
-    cin >> s;
-    cout << s << endl;
-    cin >> s;
-    cout << s << endl;
-    // This lets the operating system (Windows, Mac, Linux, etc.) know that the program
-    // did not encounter any errors
+	// Open a window
+    AnimationWindow window;
+
+    // Draw a circle at the point (100, 100), with a radius of 50
+    window.draw_circle({100, 100}, 50);
+    
+    // Ensure the window remains open until closed. 
+    // Otherwise the program exits, and you don't get to see the fruits of your labour
+    window.wait_for_close();
+
     return 0;
 }
-
-//------------------------------------------------------------------------------
