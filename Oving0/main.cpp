@@ -12,7 +12,14 @@
 int main() {
     // Show a nice message in the Terminal window
     cout << "Hello, World!" << endl;
-
+    string s;
+    cout << "Write me something:" << endl;
+    cin >> s;
+    cout << s << endl;
+    cin >> s;
+    cout << s << endl;
+    cin >> s;
+    cout << s << endl;
     // This lets the operating system (Windows, Mac, Linux, etc.) know that the program
     // did not encounter any errors
     return 0;
