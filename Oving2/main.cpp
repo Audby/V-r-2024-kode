@@ -99,7 +99,7 @@ double valuta() {
 //Oppgave 2f: Bruker inputDouble fordi det gir bedre presisjon. Når man gjør om valuta, så er det ofte mange desimaltall som kan påvirke presisjonen i beregningene mye,
 //og da trenger man gjerne mange desimaltall med.
 
-//Oppgave 2g:
+//Oppgave 2g: Her får jeg uendelig tabell, men vet ikke hvorfor.
 int g_tab() {
     int hoyde = 0;
     int bredde = 0;
@@ -108,7 +108,13 @@ int g_tab() {
     return hoyde, bredde;
 }
 
-{int main() {
+double discriminant(double a, double b, double c) {
+    double prod = 0;
+    prod = pow(b,2) - 4*a*c;
+    return prod;
+}
+
+int main() {
     cout << "Hvilken funksjon ønsker du å kjøre (0-4)?" << endl;
     int funk;
     cin >> funk;
@@ -155,8 +161,9 @@ int g_tab() {
     }
 
     if (funk == 8) {
-        int h, b;
-        tie(h, b) = g_tab();
+        int h,b = g_tab();
+        //int b=0;
+        //tie(h, b) = g_tab();
         for (int i = 1; i<=h; i++) {
             for (int j = 1; j <= h; j++) {
                 cout << setw(10) << i*j << " ";
@@ -164,7 +171,12 @@ int g_tab() {
         cout << endl;
         }
     }
-    return 0;}
-}
+
+    double resultat_3a = discriminant(2.2,3.3,4.4);
+    cout << resultat_3a << endl;
+
+    return 0;
+    }
+
 
 
