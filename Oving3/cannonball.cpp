@@ -2,6 +2,7 @@
 #include "std_lib_facilities.h"
 #include <cmath>
 #include <vector>
+#include <random>
 
 //2a)
 double acclY() {
@@ -71,6 +72,8 @@ double getUserInputTheta() {
     return theta;
 }
 
+//4b)
+
 //Ber brukeren om en startfart
 double getUserInputInitVelocity() {
     double vel;
@@ -121,3 +124,10 @@ double getDistanceTraveled(double velocityX, double velocityY) {
     double flight_time = flightTime(velocityY);
     return posX(0, velocityX, flight_time);
 }
+
+//4c)
+double targetPractice(double distanceToTarget, double velocityX, double velocityY) {
+    double posisjonX = getDistanceTraveled(velocityX, velocityY);
+    return distanceToTarget - posisjonX;
+}
+
