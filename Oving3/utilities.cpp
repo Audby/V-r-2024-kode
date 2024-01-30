@@ -24,11 +24,12 @@ void playTargetPractice() {
     double avvik;
     int i=0;
     for (i=0; i<10; i++) {
-        angle = getUserInputTheta();
-        sf = getUserInputVelocity();
-        vector<double> velocityVector = getVelocityVector(angle, sf);
+        angle = degToRad();
+        sf = getUserInputInitVelocity();
+        vector<double> velocityVector = getVelocityVector();
         avst = getDistanceTraveled(velocityVector[0],velocityVector[1]);
         avvik = targetPractice(blinkpos, velocityVector[0], velocityVector[1]);
+        cout << "Kula landet ved: " << avst << " meter." <<endl;
         i += 1;
         if (avvik <= 5) {
             cout << "Treff!" << endl;

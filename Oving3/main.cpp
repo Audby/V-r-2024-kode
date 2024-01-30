@@ -12,7 +12,7 @@ int randomWithLimits(int nedre, int ovre);
 void playTargetPractice();
 
 int main() {
-    
+    /*
     testDeviation(posX(0.0,50.0,5.0), 250.0, 0.0001);
 
     //getVelocityVector();
@@ -25,6 +25,7 @@ int main() {
     
     int tilftall = randomWithLimits(0,10);
     cout << tilftall << endl;
+    */
 
     playTargetPractice();
 
