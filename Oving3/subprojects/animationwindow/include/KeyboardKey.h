@@ -8,6 +8,9 @@ enum class KeyboardKey {
     AUDIO_MUTE, AUDIO_NEXT, AUDIO_PLAY, AUDIO_PREV, AUDIO_STOP, AUDIO_VOLUME_UP, AUDIO_VOLUME_DOWN,
     F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15, F16, F17, F18, F19, F20, F21, F22, F23, F24,
 
+    // Norwegian keys
+    AA, AE, OO,
+
     BACKSPACE,
     TAB,
     ENTER,

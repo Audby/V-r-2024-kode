@@ -294,6 +294,14 @@ KeyboardKey TDT4102::internal::convertSDLKeyToKeyboardKey(SDL_Keysym key) {
         case SDLK_AUDIOMUTE:
             return KeyboardKey::AUDIO_MUTE;
 
+        // Norwegian keys. Assumes nordic keyboard layout
+        case 230:
+            return KeyboardKey::AE;
+        case 248:
+            return KeyboardKey::OO;
+        case 229:
+            return KeyboardKey::AA;
+
 
             // Unsupported keys
         case SDLK_KP_EQUALSAS400:
@@ -396,6 +404,6 @@ KeyboardKey TDT4102::internal::convertSDLKeyToKeyboardKey(SDL_Keysym key) {
             return KeyboardKey::UNKNOWN;
 
         default:
-            throw std::runtime_error("Unknown SDL key detected: " + std::string(SDL_GetKeyName(key.sym)));
+            return KeyboardKey::UNKNOWN;
     }
 }
