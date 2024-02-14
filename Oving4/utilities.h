@@ -16,3 +16,16 @@ struct Student {
 void printStudent(const Student& Student);
 
 bool isInProgram(const Student& student, const std::string& program);
+
+//Oppgave 3b)
+int randomWithLimits(int nedre, int ovre);
+
+string randomizeString(int lengde, char nedre, char ovre);
+
+//Oppgave 3c)
+void testString();
+
+//Oppgave 3d)
+string readInputToString(int lengde, char nedre, char ovre);
+
+int countChar(string tilfeldigstreng, char tegn);
