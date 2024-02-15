@@ -26,7 +26,8 @@ class Card {
         Card(Suit suit, Rank rank); 
         string getSuit();
         string getRank();
-        string toString();
+        string toString() const;
+        int getValue() const;
 
 };
 

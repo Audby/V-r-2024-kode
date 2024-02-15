@@ -6,8 +6,7 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/subprojects/animationwindow/include/**",
                 "${workspaceFolder}/subprojects/sdl2_image_windows/include/**",
-                "${workspaceFolder}/subprojects/sdl2_windows/include/**",
-                "${workspaceFolder}/subprojects/animationwindow/include"
+                "${workspaceFolder}/subprojects/sdl2_windows/include/**"
             ],
             "defines": [
                 "_DEBUG",

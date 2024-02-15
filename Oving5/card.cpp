@@ -1,4 +1,7 @@
 #include "std_lib_facilities.h"
+#include <map>
+#include <random>
+#include <vector>
 #include "card.h"
 
 /*Definer funksjonen suitTostring(), smo tar inn en Suit og returnerer 
@@ -50,8 +53,6 @@ Card::Card(Suit suit, Rank rank) : s{suit}, r{rank}
 
 //Oppgave 2c)
 string Card::getSuit() {
-    Suit s;
-    Rank r;
     if (s == Suit::clubs || s == Suit::spades) {
         return "Black";
     } else {
@@ -61,15 +62,11 @@ string Card::getSuit() {
 
 //Oppgave 2d)
 string Card::getRank() {
-    Suit s;
-    Rank r;
     return rankToString(r);
 }
 
 //Oppgave 2e)
-string Card::toString() {
-    Suit s;
-    Rank r;
+string Card::toString() const {
     return rankToString(r) + " of " + suitToString(s);
 }
 

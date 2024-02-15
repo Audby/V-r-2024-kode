@@ -1,5 +1,5 @@
 #include "std_lib_facilities.h"
-#include "card.h"
+#include "blackJack.h"
 
 int main() {
 
@@ -14,6 +14,9 @@ int main() {
     Card Card{Suit::spades, Rank::ace};
     cout << Card.toString() << '\n';
 
+    //Oppgave 4
+    Blackjack b;
+    b.playGame();
 
     return 0;
 }
