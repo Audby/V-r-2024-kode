@@ -1,0 +1,3 @@
+Kurskode: TDT4102, Kursnavn: C++
+Kurskode: TDT4110, Kursnavn: Informasjonsteknologi grunnkurs
+Kurskode: TMA4100, Kursnavn: Matematikk 1
