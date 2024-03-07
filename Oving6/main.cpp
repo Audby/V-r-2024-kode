@@ -94,9 +94,9 @@ int main() {
 
     cout << "Hello, World!" << endl;
 
-    //writeWord();
+    writeWord();
 
-    //readWord();
+    readWord();
 
     cout << "Capitals:" << endl;
     for (pair<const string, const string> elem : capitalsMap) {

@@ -4,7 +4,6 @@
 #include <vector>
 
 
-//Oppgave 4b)
 bool isAce(Card card) {
     return card.getRank() == rankToString(Rank::ace);
 }
@@ -74,7 +73,7 @@ void Blackjack::drawDealerCard() {
 }
 
 //Oppgave 4g)
-void playGame() {
+void Blackjack::playGame() {
     Blackjack game;
     game.drawPlayerCard();
     game.drawPlayerCard();

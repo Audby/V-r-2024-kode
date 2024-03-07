@@ -7,7 +7,7 @@ class Blackjack {
         CardDeck deck;
         
     public:
-        Blackjack();
+        
         int getCardValue(Card card);
         int getHandScore(vector<Card> hand);
         bool askPlayerDrawCard();
