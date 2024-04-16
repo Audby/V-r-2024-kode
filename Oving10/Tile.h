@@ -21,7 +21,7 @@ class Tile : public TDT4102::Button
 												{6, TDT4102::Color::dark_cyan},
 												{7, TDT4102::Color::dark_red},
 												{8, TDT4102::Color::gold}};
-
+	bool isMine = 0;
 public:
 	Tile(TDT4102::Point pos, int size);
 
