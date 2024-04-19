@@ -121,5 +121,7 @@ class AnimationWindow {
     // Getters for the window dimensions
     int width();
     int height();
+
+    void setBackgroundColor(TDT4102::Color newBackgroundColor);
 };
 }  // namespace TDT4102

@@ -23,20 +23,20 @@ namespace TDT4102::internal {
     };
 
     static const std::unordered_map<TDT4102::Font, std::vector<std::string>> TTFFilenames {
-        {Font::arial, {"Arial.ttf", "arial.ttf", "LiberationSans.ttf", "LiberationSans-Regular.ttf"}},
-        {Font::arial_bold, {"Arial_Bold.ttf", "arialb.ttf", "arialbd.ttf", "Arial Bold.ttf", "LiberationSans-Bold.ttf"}},
-        {Font::arial_bold_italic, {"Arial_Bold_Italic.ttf", "arialbi.ttf", "Arial Bold Italic.ttf", "LiberationSans-BoldItalic.ttf"}},
-        {Font::arial_italic, {"Arial_Italic.ttf", "ariali.ttf", "Arial Italic.ttf", "LiberationSans-Italic.ttf"}},
+        {Font::arial, {"Arial.ttf", "arial.ttf", "LiberationSans.ttf", "LiberationSans-Regular.ttf", "DejaVuSans.ttf"}},
+        {Font::arial_bold, {"Arial_Bold.ttf", "arialb.ttf", "arialbd.ttf", "Arial Bold.ttf", "LiberationSans-Bold.ttf", "DejaVuSans-Bold.ttf"}},
+        {Font::arial_bold_italic, {"Arial_Bold_Italic.ttf", "arialbi.ttf", "Arial Bold Italic.ttf", "LiberationSans-BoldItalic.ttf", "DejaVuSans-BoldOblique.ttf"}},
+        {Font::arial_italic, {"Arial_Italic.ttf", "ariali.ttf", "Arial Italic.ttf", "LiberationSans-Italic.ttf", "DejaVuSans-Oblique.ttf"}},
 
-        {Font::courier, {"Courier_New.ttf", "cour.ttf", "Courier New.ttf", "LiberationMono.ttf", "LiberationMono-Regular.ttf"}},
-        {Font::courier_bold, {"Courier_New_Bold.ttf", "courbd.ttf", "Courier New Bold.ttf", "LiberationMono-Bold.ttf"}},
-        {Font::courier_bold_italic, {"Courier_New_Bold_Italic.ttf", "courbi.ttf", "Courier New Bold Italic.ttf", "LiberationMono-BoldItalic.ttf"}},
-        {Font::courier_italic, {"Courier_New_Italic.ttf", "couri.ttf", "Courier New Bold Italic.ttf", "LiberationMono-Italic.ttf"}},
+        {Font::courier, {"Courier_New.ttf", "cour.ttf", "Courier New.ttf", "LiberationMono.ttf", "LiberationMono-Regular.ttf", "DejaVuSansMono.ttf"}},
+        {Font::courier_bold, {"Courier_New_Bold.ttf", "courbd.ttf", "Courier New Bold.ttf", "LiberationMono-Bold.ttf", "DejaVuSansMono-Bold.ttf"}},
+        {Font::courier_bold_italic, {"Courier_New_Bold_Italic.ttf", "courbi.ttf", "Courier New Bold Italic.ttf", "LiberationMono-BoldItalic.ttf", "DejaVuSansMono-BoldOblique.ttf"}},
+        {Font::courier_italic, {"Courier_New_Italic.ttf", "couri.ttf", "Courier New Bold Italic.ttf", "LiberationMono-Italic.ttf", "DejaVuSansMono-Oblique.ttf"}},
 
-        {Font::times, {"Times_New_Roman.ttf", "times.ttf", "Times New Roman.ttf", "LiberationSerif.ttf", "LiberationSerif-Regular.ttf"}},
-        {Font::times_bold, {"Times_New_Roman_Bold.ttf", "timesb.ttf", "timesbd.ttf", "Times New Roman Bold.ttf", "LiberationSerif-Bold.ttf"}},
-        {Font::times_bold_italic, {"Times_New_Roman_Bold_Italic.ttf", "timesbi.ttf", "Times New Roman Bold Italic.ttf", "LiberationSerif-BoldItalic.ttf"}},
-        {Font::times_italic, {"Times_New_Roman_Italic.ttf", "timesi.ttf", "Times New Roman Italic.ttf", "LiberationSerif-Italic.ttf"}}
+        {Font::times, {"Times_New_Roman.ttf", "times.ttf", "Times New Roman.ttf", "LiberationSerif.ttf", "LiberationSerif-Regular.ttf", "DejaVuSerif.ttf"}},
+        {Font::times_bold, {"Times_New_Roman_Bold.ttf", "timesb.ttf", "timesbd.ttf", "Times New Roman Bold.ttf", "LiberationSerif-Bold.ttf", "DejaVuSerif-Bold.ttf"}},
+        {Font::times_bold_italic, {"Times_New_Roman_Bold_Italic.ttf", "timesbi.ttf", "Times New Roman Bold Italic.ttf", "LiberationSerif-BoldItalic.ttf", "DejaVuSerif-BoldItalic.ttf"}},
+        {Font::times_italic, {"Times_New_Roman_Italic.ttf", "timesi.ttf", "Times New Roman Italic.ttf", "LiberationSerif-Italic.ttf", "DejaVuSerif-Italic.ttf"}}
     };
 
     class FontCache {

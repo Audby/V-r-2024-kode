@@ -14,6 +14,7 @@ Tile::Tile(TDT4102::Point pos, int size) :
 
 void Tile::open()
 {
+	
 }
 
 void Tile::flag()

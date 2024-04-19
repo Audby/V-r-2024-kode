@@ -41,7 +41,7 @@ TDT4102::AnimationWindow::AnimationWindow(int x, int y, int width, int height, c
     }
 
     // Default window background colour
-    SDL_SetRenderDrawColor(rendererHandle, 0xFF, 0xFF, 0xFF, 0xFF);
+    SDL_SetRenderDrawColor(rendererHandle, backgroundColour.redChannel, backgroundColour.greenChannel, backgroundColour.blueChannel, backgroundColour.alphaChannel);
     SDL_RenderClear(rendererHandle);
 
     SDL_RendererInfo rendererInfo;
@@ -387,4 +387,8 @@ void TDT4102::AnimationWindow::startNuklearDraw(TDT4102::Point location, std::st
 
 void TDT4102::AnimationWindow::endNuklearDraw() {
     nk_end(context);
+}
+
+void TDT4102::AnimationWindow::setBackgroundColor(TDT4102::Color newBackgroundColor) {
+    backgroundColour = newBackgroundColor;
 }
