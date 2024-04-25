@@ -1,5 +1,6 @@
 #include "MinesweeperWindow.h"
 #include <iostream>
+#include <random>
 
 MinesweeperWindow::MinesweeperWindow(int x, int y, int width, int height, int mines, const string &title) : 
 	// Initialiser medlemsvariabler, bruker konstruktoren til AnimationWindow-klassen
@@ -16,6 +17,18 @@ MinesweeperWindow::MinesweeperWindow(int x, int y, int width, int height, int mi
 		}
 	}
 	// Legg til miner paa tilfeldige posisjoner
+	int placedMines = 0;
+	while (placedMines < mines) {
+		random_device rd;
+		default_random_engine generator(rd());
+		uniform_int_distribution<int> distribution(0,tiles.size()-1);
+		int tilePosition = distribution(generator);
+		auto& tile = tiles[tilePosition];
+		if (!tile->getIsMine()) {
+			tile->setIsMine(true);
+			placedMines++;
+		}
+	}
 }
 
 vector<Point> MinesweeperWindow::adjacentPoints(Point xy) const {
