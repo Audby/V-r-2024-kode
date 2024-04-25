@@ -75,3 +75,25 @@ std::ostream&operator<<(std::ostream& os, const Meeting& m) {
         os << name << ", ";
     }
 }
+
+std::vector<std::shared_ptr<Person>> Meeting::findPotentialCoDriving(const Meeting& otherMeeting) const {
+    std::vector<std::shared_ptr<Person>> potentialDrivers;
+
+    // Sjekker om møtene er på samme sted og dag
+    if (this->location == otherMeeting.location && this->day == otherMeeting.day) {
+        // Sjekker om tidene for møtene er innenfor en time
+        if (std::abs(this->startTime - otherMeeting.startTime) < 60 &&
+            std::abs(this->endTime - otherMeeting.endTime) < 60) {
+            
+            // Gå gjennom alle deltakerne i det andre møtet
+            for (auto& person : otherMeeting.participants) {
+                // Anta at Person-klassen har en funksjon hasFreeCarSeats() som returnerer en bool
+                if (person->hasAvailableSeats()) {
+                    potentialDrivers.push_back(person);
+                }
+            }
+        }
+    }
+
+    return potentialDrivers;
+}
