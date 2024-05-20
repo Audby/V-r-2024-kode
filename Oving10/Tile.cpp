@@ -45,3 +45,8 @@ void Tile::setIsMine(bool newIsMine) {
 	isMine = newIsMine;
 }
 
+void Tile::setAdjMines(int n) {
+	setLabel(std::to_string(n));
+	setLabelColor(minesToColor.at(n));
+}
+

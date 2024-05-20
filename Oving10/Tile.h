@@ -29,4 +29,8 @@ public:
 	void flag();
 
 	Cell getState() const { return state; };
+	bool getIsMine();
+	void setIsMine(bool newIsMine);
+	void setAdjMines(int n);
+	void colorFromMines(int numMines);
 };

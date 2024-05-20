@@ -48,11 +48,72 @@ vector<Point> MinesweeperWindow::adjacentPoints(Point xy) const {
 	return points;
 }
 
+void Tile::colorFromMines(int numMines) {
+	set_label_color(minesToColor.at(numMines));
+}
+
+void MinesweeperWindow::openAdjacentTiles(Point xy) {
+    vector<Point> adjacentPoints = this->adjacentPoints(xy);
+    for (Point p : adjacentPoints) {
+        auto& tile = at(p);
+        if (tile->getState() == Cell::closed && !tile->getIsMine()) {
+            tile->open();
+            int numMines = countMines(this->adjacentPoints(p));
+            if (numMines == 0) {
+                openAdjacentTiles(p);
+            } else {
+                tile->setAdjMines(numMines);
+            }
+        }
+    }
+}
+
 void MinesweeperWindow::openTile(Point xy) {
+	auto& tile = at(xy);
+	if (tile->getState() == Cell::closed) {
+		tile->open();
+	}
+	if (!tile->getIsMine()) {
+		const vector<Point> surroundingPoints = adjacentPoints(xy);
+		int numMines = countMines(surroundingPoints);
+		if (numMines > 0) {
+			tile->setLabel(to_string(numMines));
+			tile->colorFromMines(numMines);
+		}
+		else {
+			openAdjacentTiles(xy);
+		}
+	}
+	else {
+		AnimationWindow window;
+		window.draw_text(xy, "Lol");
+
+	}
+	
 }
 
 void MinesweeperWindow::flagTile(Point xy) {
+	auto& tile = at(xy);
+	if (tile->getState() == Cell::closed) {
+		tile->flag();
+	}
+	else if (tile->getState() == Cell::flagged) {
+		tile->flag();
+	}
+	
 }
+
+int MinesweeperWindow::countMines(vector<Point> coords) const {
+	int numMines = 0;
+	for (int i=0; i<coords.size(); i++) {
+		auto& tile = at(coords[i]);
+		if (tile->getIsMine()) {
+			numMines++;
+		}
+	}
+	return numMines;
+}
+
 
 //Kaller openTile ved venstreklikk og flagTile ved hoyreklikk
 void MinesweeperWindow::cb_click() {

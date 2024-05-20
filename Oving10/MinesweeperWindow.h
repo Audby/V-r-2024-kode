@@ -10,6 +10,7 @@ class MinesweeperWindow : public AnimationWindow
 {
 public:
 	// storrelsen til hver tile
+	void openAdjacentTiles(Point xy);
 	static constexpr int cellSize = 30;
 	MinesweeperWindow(int x, int y, int width, int height, int mines, const string& title);
 private:
@@ -17,7 +18,7 @@ private:
 	const int height;		// Hoyde i antall tiles
 	const int mines;		// Antall miner
 	vector<shared_ptr<Tile>> tiles; // Vektor som inneholder alle tiles
-
+	std::string statusText = "";
 	// hoyde og bredde i piksler
 	int Height() const { return height * cellSize; } 
 	int Width() const { return width * cellSize; }
