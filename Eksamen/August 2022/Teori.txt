@@ -1,11 +1,57 @@
 1: 1, 2, 3
 2: 1, 4
 3: 1, 3
-4: 1
+4: 1, 3
 5: 1, 4
 6: 1, 3
 7: 1
 8: 1
 9: 1
 10a: 1, 3
-10b: 
+10b: 1, 2, 3
+
+Oppgave 11:
+Man trenger navn på parameteren og datatype minimum, men trenger i utgangspunktet
+ikke mer enn dette. Kan også ha med verdi og hvor variabelen er hentet fra,
+eksempelvis en klasse (namespace)
+
+Oppgave 12:
+Trenger navn, returtype, inputparametre minimum. Videre trengs også hva 
+funksjonen i det hele tatt gjør, altså funksjon og deretter hva 
+funksjonen skal returnere. 
+
+Oppgave 13:
+Ei lenket liste har ikke sammenhengende minne i slik at man ikke trenger å
+flytte andre elementer hver gang man skal legge til eller fjerne elementer
+som man må i vektorer.
+
+Oppgave 14:
+Pekere kan opprette et alias av det opprinnelige objektet. Så, dersom pekeren
+endrer sin verdi endrer det også det opprinnelige objektet. Hvis man ikke er
+forsiktig kan da det opprinnelige objektet bruke verdier som det egentlig ikke
+skulle bruke.
+
+Oppgave 15:
+Char har en satt grense for å kunne representere alle mulige tegn og symboler
+som man finner i det innebygde biblioteket, som utf-8. Int har intervall for å 
+kunne allokere nok plass til det som er hensiktsmessig for de fleste register
+som man finner i moderne datamaskiner.
+
+Oppgave 16:
+Dersom funksjonen tolower sin input er større enn 'f'-1, altså f representert
+som tall fra ASCII, skal inputparametren returneres. Hvis den ikke gjør det, 
+så skal funksjonen kjøres igjen, men med +1 lagt til input.
+
+Oppgave 17:
+Vettafaen
+
+Oppgave 18:
+(a): Akselerasjon multiplisert med tid i andre er skrevet på en måte som gjør
+at kompilatoren ikke vet hvilken rekkefølge som er riktig. 
+(b): Bruke parantese, eller definere variablene over returen.
+(c): Fordi noen ganger er time=1 sekund.
+
+Oppgave 19:
+Må vel skrive endl; i main-funksjonen? I tillegg klarer ikke kompilatoren å gange
+sammen to funksjoner. Siden vi har definert namespace kan vi løse det ved å gi 
+sum(a,b) til en egen variabel og deretter bruke pow(sum,2) for å få andre grad.
