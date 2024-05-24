@@ -17,11 +17,12 @@ Graph_lib::Color::Color_type ImageRenderer::get_color_value(string color)
 {
   // BEGIN: R1
   //
-  // Write your answer to assignment R1 here, between the // BEGIN: R1
-  // and // END: R1 comments. You should remove any code that is
-  // already there and replace it with your own.
-
-  return color_map["black"];
+  if (color_map.count(color)) {
+    return color_map[color];
+  }
+  else {
+    throw runtime_error("Invalid color " + color);
+  }
 
   // END: R1
 }
@@ -35,11 +36,7 @@ Graph_lib::Color::Color_type ImageRenderer::get_color_value(string color)
 void ImageRenderer::add_color(char ref, string color_name)
 {
   // BEGIN: R2
-  //
-  // Write your answer to assignment R2 here, between the // BEGIN: R2
-  // and // END: R2 comments. You should remove any code that is
-  // already there and replace it with your own.
-
+  colors[ref] = get_color_value(color_name);
   // END: R2
 }
 
@@ -53,11 +50,7 @@ void ImageRenderer::add_color(char ref, string color_name)
 void ImageRenderer::add_line()
 {
   // BEGIN: R3
-  //
-  // Write your answer to assignment R3 here, between the // BEGIN: R3
-  // and // END: R3 comments. You should remove any code that is
-  // already there and replace it with your own.
-
+  image.push_back(make_unique<vector<Graph_lib::Color::Color_type color>>());
   // END: R3
 }
 
@@ -75,11 +68,7 @@ void ImageRenderer::add_pixel(Graph_lib::Color::Color_type color)
   }
 
   // BEGIN: R4
-  //
-  // Write your answer to assignment R4 here, between the // BEGIN: R4
-  // and // END: R4 comments. You should remove any code that is
-  // already there and replace it with your own.
-
+  image.back() -> push_back(color);
   // END: R4
 }
 
@@ -114,10 +103,9 @@ void ImageRenderer::read_image(string file_name)
 
   // BEGIN: R5
   //
-  // Write your answer to assignment R5 here, between the // BEGIN: R5
-  // and // END: R5 comments. You should remove any code that is
-  // already there and replace it with your own.
-
+  header_stream >> width;
+  header_stream >> height;
+  header_stream >> ncolors;
   // END: R5
 
   // cout << "Image is " << width << " x " << height << " with " << ncolors
@@ -154,11 +142,19 @@ void ImageRenderer::read_image(string file_name)
 void ImageRenderer::read_image_colors(ifstream &image_file_stream, int ncolors)
 {
   // BEGIN: R6
-  //
-  // Write your answer to assignment R6 here, between the // BEGIN: R6
-  // and // END: R6 comments. You should remove any code that is
-  // already there and replace it with your own.
+  for (int i = 0; i < ncolors; i++) {
+    string color_def;
+    getline(image_file_stream, color_def);
+    istringstream color_def_stream(color_def);
 
+    char ref;
+    string color_name;
+
+    color_def_stream >> ref;
+    color_def_stream >> color_name;
+
+    add_color(ref, color_name);
+  }
   // END: R6
 }
 
@@ -179,11 +175,14 @@ void ImageRenderer::read_image_pixels(ifstream &image_file_stream, int width,
                                       int height)
 {
   // BEGIN: R7
-  //
-  // Write your answer to assignment R7 here, between the // BEGIN: R7
-  // and // END: R7 comments. You should remove any code that is
-  // already there and replace it with your own.
-
+  for (int i = 0; i < height; i++) {
+    string img_line;
+    getline(image_file_stream, img_line);
+    add_line();
+    for (int j = 0; j < width; j++) {
+      add_pixel(colors[img_line[j]]);
+    }
+  }
   // END: R7
 }
 

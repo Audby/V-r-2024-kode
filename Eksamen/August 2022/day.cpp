@@ -37,11 +37,11 @@ Day::Day(AnimationWindow &window, int xpos, int ypos, string city, int day,
 void Day::show_day()
 {
   // BEGIN: D1
-  //
-  // Write your answer to assignment D1 here, between the // BEGIN: D1
-  // and // END: D1 comments. You should remove any code that is
-  // already there and replace it with your own.
-
+  draw_text({xpos, ypos + 20}, format_weekday(day));
+  draw_text({xpos, ypos + 100}, format_value(temp, 1, UNIT_DC));
+  draw_text({xpos, ypos + 120}, format_value(wind_speed, 1, UNIT_MS) + " " +
+                                    format_wind_dir(wind_dir));
+  draw_text({xpos, ypos + 140}, format_value(precip_amount, 1, UNIT_MM));
   // END: D1
 
   // Draws the weather symbol implemented in tasks R1-R3. Don't remove

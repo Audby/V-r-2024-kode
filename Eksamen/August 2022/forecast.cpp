@@ -20,15 +20,13 @@ Forecast::Forecast(AnimationWindow &window, int xpos, int ypos)
 // the  parameter is invalid, i.e. it is outside the range
 int Forecast::get_day_placement(int day)
 {
-  // BEGIN: F1
-  //
-  // Write your answer to assignment F1 here, between the // BEGIN: F1
-  // and // END: F1 comments. You should remove any code that is
-  // already there and replace it with your own.
-
-  return 0;
-
-  // END: F1
+  int offset = 150;
+  if (day > 6 || day < 0) {
+    throw runtime_error("Invalid day");
+  }
+  else {
+    return (day) * offset;
+  }
 }
 
 // Task F2: Capitalize a string
@@ -36,15 +34,10 @@ int Forecast::get_day_placement(int day)
 // Write a function that capitalizes the first character of a string such that capitalize("trondheim") == "Trondheim". This function only needs to change the first character of the string. Remember that the function toupper can be used to change a char value to uppercase.
 string Forecast::capitalize(string word)
 {
-  // BEGIN: F2
-  //
-  // Write your answer to assignment F2 here, between the // BEGIN: F2
-  // and // END: F2 comments. You should remove any code that is
-  // already there and replace it with your own.
-
-  return word;
-
-  // END: F2
+  char forste_bokstav = word[0];
+  string word_to = word;
+  word_to[0] = forste_bokstav;
+  return word_to;
 }
 
 // Task F3: Precipitation statistics
@@ -62,12 +55,11 @@ string Forecast::capitalize(string word)
 // instance.
 void Forecast::precip_statistics()
 {
+  
   // BEGIN: F3
-  //
-  // Write your answer to assignment F3 here, between the // BEGIN: F3
-  // and // END: F3 comments. You should remove any code that is
-  // already there and replace it with your own.
-
+  for (auto& day : days) {
+     total_precip += day->precip_amount;
+  }
   // END: F3
 }
 
@@ -87,11 +79,22 @@ void Forecast::precip_statistics()
 void Forecast::temp_statistics()
 {
   // BEGIN: F4
-  //
-  // Write your answer to assignment F4 here, between the // BEGIN: F4
-  // and // END: F4 comments. You should remove any code that is
-  // already there and replace it with your own.
+  double min_temp=0;
+  double max_temp=0;
+  double avg_temp=0;
+  double total_temp;
 
+  for (auto& day : days) {
+    if (day->temp < min_temp) {
+      min_temp = day->temp;
+    }
+    else if (day->temp >max_temp) {
+      max_temp = day->temp;
+    }
+    total_temp += day-> temp;
+  }
+  avg_temp = total_temp/days.size();
+  
   // END: F4
 }
 
@@ -108,11 +111,14 @@ void Forecast::temp_statistics()
 void Forecast::wind_statistics()
 {
   // BEGIN: F5
-  //
-  // Write your answer to assignment F5 here, between the // BEGIN: F5
-  // and // END: F5 comments. You should remove any code that is
-  // already there and replace it with your own.
-
+  double wind_speed = 0;
+  int windiest_day = 0;
+  for (auto &day : days) {
+    if (day -> wind_speed > wind_speed) {
+      windiest_day = day->day;
+      wind_speed = day->wind_speed;
+    }
+  }
   // END: F5
 }
 

@@ -5,14 +5,31 @@
 // Write a function that maps an integer between 0 and 6 to a weekday name. The first day of the week (value 0) is Monday. If the value of the weekday_num parameter is outside of that range, the function should throw an exception.
 string format_weekday(int weekday_num)
 {
-  // BEGIN: U1
-  //
-  // Write your answer to assignment U1 here, between the // BEGIN: U1
-  // and // END: U1 comments. You should remove any code that is
-  // already there and replace it with your own.
-
-
-  return "Someday";
+    switch (weekday_num) {
+  case 0:
+    return "Monday";
+    break;
+  case 1:
+    return "Tuesday";
+    break;
+  case 2:
+    return "Wednesday";
+    break;
+  case 3:
+    return "Thursday";
+    break;
+  case 4:
+    return "Friday";
+    break;
+  case 5:
+    return "Saturday";
+    break;
+  case 6:
+    return "Sunday";
+    break;
+  default:
+    throw runtime_error("Invalid day number");
+  }
 
   // END: U1
 }
@@ -34,15 +51,26 @@ string format_weekday(int weekday_num)
 //  - 22.5   - 67.5:   North-East
 string format_wind_dir(double heading)
 {
-  // BEGIN: U2
-  //
-  // Write your answer to assignment U2 here, between the // BEGIN: U2
-  // and // END: U2 comments. You should remove any code that is
-  // already there and replace it with your own.
-
-  return "Some-heading";
-
-  // END: U2
+    if ((heading >= 337.5 && heading <= 360) ||
+      (heading >= 0 && heading <= 22.5)) {
+    return "North";
+  } else if (heading >= 292.5 && heading <= 337.5) {
+    return "North-West";
+  } else if (heading >= 247.5 && heading <= 292.5) {
+    return "West";
+  } else if (heading >= 202.5 && heading <= 247.5) {
+    return "South-West";
+  } else if (heading >= 157.5 && heading <= 202.5) {
+    return "South";
+  } else if (heading >= 112.5 && heading <= 157.5) {
+    return "South-East";
+  } else if (heading >= 67.5 && heading <= 112.5) {
+    return "East";
+  } else if (heading >= 22.5 && heading <= 67.5) {
+    return "North-East";
+  } else {
+    throw runtime_error("Invalid heading " + to_string(heading));
+  }
 }
 
 // Task U3: Get unit as string
@@ -61,14 +89,17 @@ string format_wind_dir(double heading)
 // get_unit(UNIT_MM) == "mm".
 string get_unit(Unit unit)
 {
-  // BEGIN: U4
-  //
-  // Write your answer to assignment U4 here, between the // BEGIN: U4
-  // and // END: U4 comments. You should remove any code that is
-  // already there and replace it with your own.
-
-  return "unit";
-
+  switch (unit) {
+  case UNIT_MS:
+    return "m/s";
+    break;
+  case UNIT_MM:
+    return "mm";
+    break;
+  case UNIT_DC:
+    return "°C";
+    break;
+  }
   // END: U4
 }
 
@@ -90,16 +121,9 @@ string get_unit(Unit unit)
 // m/s"
 string format_value(double value, int decimals, Unit unit)
 {
-  // BEGIN: U4
-  //
-  // Write your answer to assignment U4 here, between the // BEGIN: U4
-  // and // END: U4 comments. You should remove any code that is
-  // already there and replace it with your own.
-
-  return to_string(value);
-
-
-  // END: U4
+  ostringstream sstr;
+  sstr << setprecision(decimals) << fixed << value << ' ' << get_unit(unit);
+  return sstr.str();
 }
 
 // |
