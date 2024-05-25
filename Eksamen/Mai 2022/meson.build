@@ -29,7 +29,11 @@ src = []
 exe = executable(
   'program',
   src,
+'application.cpp',
+'interpreter.cpp',
 'main.cpp',
+'robot.cpp',
+'robot_grid.cpp',
   dependencies : [animationwindow_dep, sdl2_dep],
   cpp_args : compiler_flags
 )
