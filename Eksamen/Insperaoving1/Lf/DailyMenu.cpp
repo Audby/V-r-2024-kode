@@ -44,19 +44,23 @@ DailyMenu createDailyMenu(string adjective, string mainDish, string sideDish) {
     menu.mainDish = mainDish;
     menu.sideDish = sideDish;
     menu.price = adjectivePriceModifiers.at(adjective) * (mainDishPrices.at(mainDish) + sideDishPrices.at(sideDish));
+
     return menu;
     // END: 1a
 }
 ostream& operator<<(ostream& os, DailyMenu d) {
 
     // BEGIN: 1b
-    os << d.mainDish << d.adjective << d.sideDish << d.price << endl;
+    os << "Dish: " << d.adjective << " " << d.mainDish << " with " << d.sideDish << endl
+       << "Price: " << d.price << endl;
+       
     return os;
     // END: 1b
 }
 
 string getDishFromNumber(map<string, double> m, int n) {
     int i = 0;
+
     for(const auto& dish : m) {
         if(i == n) {
             return dish.first;
@@ -71,22 +75,17 @@ DailyMenu getRandomMenu() {
     
     int mapSize = 8;
     // BEGIN: 2b
-    string adj;
-    string main;
-    string side;
-    
-    DailyMenu menu;
+    string adj, main, side;
+
     random_device rd;
     default_random_engine seed(rd());
-    uniform_int_distribution dist(0, mapSize-1);
+    uniform_int_distribution dist(0, mapSize - 1);
 
     adj = getDishFromNumber(adjectivePriceModifiers, dist(seed));
     main = getDishFromNumber(mainDishPrices, dist(seed));
     side = getDishFromNumber(sideDishPrices, dist(seed));
 
     DailyMenu menu = createDailyMenu(adj, main, side);
-
     return menu;
-
     // END: 2b
 }

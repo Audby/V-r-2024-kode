@@ -33,11 +33,7 @@ void Cafeteria::removeStock(string item) {
 
 DailyMenu Cafeteria::getDailyMenu(Weekday w) {
     // BEGIN: 1c
-    
-    DailyMenu menuToday;
-    menuToday = getWeeklyMenu().at(static_cast<int>(w));
-    return menuToday;
-
+    return getWeeklyMenu().at(static_cast<unsigned long long>(w));
     // END: 1c
 }
 
@@ -50,9 +46,10 @@ bool Cafeteria::isInStock(DailyMenu menu) {
 void Cafeteria::saveToFile(string fileName) {
     // BEGIN: 1e
     filesystem::path filePath(fileName);
-    ofstream ofs(filePath);
-    for (const auto &day : weeklyMenu) {
-        ofs << day << endl;
+    ofstream ofs{filePath};
+
+    for(const auto& menu : weeklyMenu) {
+        ofs << menu << endl;
     }
 
     ofs.close();
@@ -62,14 +59,15 @@ void Cafeteria::saveToFile(string fileName) {
 
 void Cafeteria::importStock(string fileName) {
     // BEGIN: 2a
-    string dish;
-    string amount;
     filesystem::path filePath(fileName);
-    ifstream ifs(filePath);
+    ifstream ifs{filePath};
+    string dish, amount;
+
     while (getline(ifs, dish, ',')) {
         getline(ifs, amount);
         stock.at(dish) = stoi(amount);
     }
+
     ifs.close();
     // END: 2a
 }
@@ -77,12 +75,12 @@ void Cafeteria::importStock(string fileName) {
 
 vector<DailyMenu> generateWeeklyMenu() {
     // BEGIN: 2c
-
     vector<DailyMenu> weeklyMenu;
-    for (int i = 0; i < 7; i++) {
+
+    for(int i = 0; i < 7; i++) {
         weeklyMenu.push_back(getRandomMenu());
     }
+    
     return weeklyMenu;
-
     // END: 2c
 }
