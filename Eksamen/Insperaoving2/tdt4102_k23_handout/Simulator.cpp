@@ -122,11 +122,29 @@ void Dove::setColor(Color color)
 
 void Dove::makeFriendsAndFoes(vector<shared_ptr<Bird>> &birds)
 {
+    double distance(FloatingPoint a, FloatingPoint b) {
+        return std::sqrt(std::pow(a.x -b.x, 2) + std::pow(a.y - b.y), 2);
+    }
     if (birds.size() > 0){
         bool isDove = isInstanceOf<Dove>(birds.at(0).get());
     }
     foes.clear();
     friends.clear();
+    vector<Bird> hawks;
+    vector<Bird> doves;
+    for (auto &b : birds) {
+        bool isFriend = (b.get() != this) && (isInstanceOf<Dove>(b.get()))
+        && (distance(b->getPosition(), position) < FRIEND_RADIUS);
+        bool isFoe = (b.get() != this) && (isInstanceOf<Hawk>(b.get())) 
+        && (distance(b->getPosition(), position) <FRIEND_RADIUS);
+        if (isFoe) {
+            foes.push_back(b);
+        }
+        if(isFriend) {
+            friends.push_back(b);
+        }
+    }
+
 }
 // END: T6
 
