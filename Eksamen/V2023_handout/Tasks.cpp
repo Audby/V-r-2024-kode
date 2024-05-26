@@ -94,11 +94,16 @@ void CameraController::handleInput(Context &ctx) {
 void Level::set_tile_at(TDT4102::Point coordinate, int tile)
 {
 // BEGIN: T6
-//
-// Write your answer to assignment T6 here, between the // BEGIN: T6
-// and // END: T6 comments. You should remove any code that is
-// already there and replace it with your own.
-    ;
+if(coordinate.x < 0 || coordinate.y < 0) {return;}
+
+    unsigned int X = static_cast<unsigned int>(coordinate.x);
+    unsigned int Y = static_cast<unsigned int>(coordinate.y);
+    size_t cell_index = Y * width + X;
+    
+    if (cell_index < tiles.size()) {
+        tiles.at(cell_index) = tile;
+    }
+
 // END: T6
 }
 
@@ -109,11 +114,15 @@ void Level::set_tile_at(TDT4102::Point coordinate, int tile)
 void Level::set_walkable_at(TDT4102::Point coordinate, bool walkable)
 {
 // BEGIN: T7
-//
-// Write your answer to assignment T7 here, between the // BEGIN: T7
-// and // END: T7 comments. You should remove any code that is
-// already there and replace it with your own.
-    ;
+    if(coordinate.x < 0 || coordinate.y < 0) {return;}
+
+    unsigned int X = static_cast<unsigned int>(coordinate.x);
+    unsigned int Y = static_cast<unsigned int>(coordinate.y);
+    size_t cell_index = Y * width + X;
+
+    if (cell_index < this->walkable.size()) {
+        this->walkable.at(cell_index) = walkable;
+    }
 // END: T7
 }
 
@@ -132,17 +141,24 @@ void PlacementOverlay::render()
     };
 
 // BEGIN: T8
-//
-// Write your answer to assignment T8 here, between the // BEGIN: T8
-// and // END: T8 comments. You should remove any code that is
-// already there and replace it with your own.
-    auto anchor = CoordinateSystem::to_screen(ctx, {begin.x,begin.y});
 
-    if ( has_image ) {
-        TileRenderer::render(ctx, active_tile, anchor);
-    } else {
-        anchor = anchor + TDT4102::Point{0, TILE_WIDTH};
-        QuadRenderer::render(ctx, anchor, TDT4102::Color{255,255,255,255});
+    Region r{begin, end};
+
+    auto [min_x, min_y] = r.begin;
+    auto [max_x, max_y] = r.end;
+
+    for ( int y = min_y; y <= max_y; y++ )
+    {
+        for ( int x = min_x; x <= max_x; x++ ) {
+            auto anchor = get_cell_coordinate(x,y);
+
+            if ( has_image ) {
+                TileRenderer::render(ctx, active_tile, anchor);
+            } else {
+                anchor = anchor + TDT4102::Point{0, TILE_WIDTH};
+                QuadRenderer::render(ctx, anchor, TDT4102::Color{255,255,255,255});
+            }
+        }
     }
 
 // END: T8
@@ -155,12 +171,21 @@ void PlacementOverlay::render()
 void Level::set_tile_region(TDT4102::Point begin, TDT4102::Point end, int tile, bool walkable)
 {
 // BEGIN: T9
-//
-// Write your answer to assignment T9 here, between the // BEGIN: T9
-// and // END: T9 comments. You should remove any code that is
-// already there and replace it with your own.
-    set_tile_at(begin, tile);
-    set_walkable_at(begin, walkable);
+    Region r{begin, end};
+
+    auto [min_x, min_y] = r.begin;
+    auto [max_x, max_y] = r.end;
+
+    try {
+        for ( int y = min_y; y <= max_y; y++ ) {
+            for ( int x = min_x; x <= max_x; x++ ) {
+                set_tile_at({x,y}, tile);
+                set_walkable_at({x,y}, walkable);
+            }
+        }
+    } catch (...) {
+        std::cerr << "Something went wrong when setting a tile region\n";
+    }
 // END: T9
 }
 
@@ -173,10 +198,10 @@ Tile::Tile(const Tile &other) : id{other.id}, walkable{other.walkable}, image{ot
 Tile &Tile::operator=(const Tile &other)
 {
 // BEGIN: T10
-//
-// Write your answer to assignment T10 here, between the // BEGIN: T10
-// and // END: T10 comments. You should remove any code that is
-// already there and replace it with your own.
+    id = other.id;
+    walkable = other.walkable;
+    image = other.image;
+
     return *this;
 // END: T10
 }
@@ -187,12 +212,15 @@ Tile &Tile::operator=(const Tile &other)
 TileDescriptor TileLoader::process_line(std::string line)
 {
 // BEGIN: T11
-//
-// Write your answer to assignment T11 here, between the // BEGIN: T11
-// and // END: T11 comments. You should remove any code that is
-// already there and replace it with your own.
-    static int current_id = 0;
-    return TileDescriptor{current_id++, "house_00.png", true};
+    std::istringstream istr(line);
+    
+    int id;
+    std::string filename;
+    bool walkable;
+
+    istr >> id >> filename >> walkable;
+    TileDescriptor result{id, filename, walkable};
+    return result;
 // END: T11
 }
 
@@ -205,10 +233,19 @@ TilePool TileLoader::load(const std::filesystem::path descriptor_file_path)
     auto imgpool = TilePool{};
 
 // BEGIN: T12
-//
-// Write your answer to assignment T12 here, between the // BEGIN: T12
-// and // END: T12 comments. You should remove any code that is
-// already there and replace it with your own.
+    std::ifstream strm(descriptor_file_path);
+    std::istringstream ss;
+    std::string current_line;
+
+    while(std::getline(strm, current_line)) {
+        auto line_content = process_line(current_line);
+        auto [id, filename, walkable] = line_content;
+        Tile currently_loaded_tile{id, static_cast<bool>(walkable), "tiles/" + filename};
+        imgpool.add_tile(id, currently_loaded_tile);
+    }
+    return imgpool;
+
+/*
     imgpool.add_tile(0, Tile(0, false, "tiles/house_00.png"));
     imgpool.add_tile(1, Tile(1, false, "tiles/house_01.png"));
     imgpool.add_tile(2, Tile(2, false, "tiles/house_02.png"));
@@ -219,7 +256,7 @@ TilePool TileLoader::load(const std::filesystem::path descriptor_file_path)
     // imgpool.tile_ids.push_back(2);
     // imgpool.tile_ids.push_back(50);
 
-    return imgpool;
+    return imgpool;*/
 // END: T12
 }
 
@@ -242,11 +279,37 @@ bool LevelWriter::write(std::filesystem::path path, const Level &level)
     };
 
 // BEGIN: T13
-//
-// Write your answer to assignment T13 here, between the // BEGIN: T13
-// and // END: T13 comments. You should remove any code that is
-// already there and replace it with your own.
-    return false;
+    std::ofstream fs{path};
+
+    if ( ! fs.is_open() ) { return false; }
+
+    fs << width << '\t' << height << std::endl;
+
+    // Write TILES
+    for ( int j = 0; j < height; j++ )
+    {
+        for ( int i = 0; i < width; i++ )
+        {
+            if ( i > 0 ) fs << '\t';
+            fs << tile_at(j,i);
+        }
+        fs << std::endl;
+    }
+    fs << "END";
+    fs << std::endl;
+
+    // Write WALKABLE
+    for ( int j = 0; j < height; j++ )
+    {
+        for ( int i = 0; i < width; i++ )
+        {
+            if ( i > 0 ) fs << '\t';
+            fs << (walkable_at(j,i) ? '1' : '0');
+        }
+        fs << std::endl;
+    }
+    fs << "END";
+    return true;
 // END: T13
 }
 

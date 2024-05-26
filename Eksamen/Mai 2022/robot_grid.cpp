@@ -212,7 +212,7 @@ void RobotGrid::check_name_available(string name) const
 {
   // BEGIN: G11
   if (robots.find(name) != robots.end()) {
-    throw runtime_error("Name " + name + " is taken.")
+    throw runtime_error("Name " + name + " is taken.");
   }
   // END: G11
 }
