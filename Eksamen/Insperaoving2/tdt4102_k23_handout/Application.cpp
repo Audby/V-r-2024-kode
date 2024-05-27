@@ -70,7 +70,14 @@ void Application::run()
 void Application::loadAndApplyConfiguration(filesystem::path filepath)
 {
 // BEGIN: T5
-    ;
+    if (!filesystem::exists(filepath)) {
+    throw std::invalid_argument("Could not open file path: " + filepath.string());
+    }
+    ifstream filestream{filepath};
+    int numDoves, numHawks;
+    filestream >> numDoves;
+    filestream >> numHawks;
+    sim.applyConfiguration(numDoves, numHawks);
 // END: T5
 }
 

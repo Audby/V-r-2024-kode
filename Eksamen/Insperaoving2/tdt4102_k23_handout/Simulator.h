@@ -99,16 +99,23 @@ private:
 
 // Task T11: Complete the Hawk class.
 // BEGIN: T11
-class Hawk
+class Hawk : public Bird
 {
-#define HAWK_IS_IMPLEMENTED
-
-    virtual ~Hawk () {};
-
+//#define HAWK_IS_IMPLEMENTED
+private:
     std::array<FloatingPoint, 4> controlPoints;
     double time=0.0;
 
     void generateControlPoints(const int widthRange, const int heightRange);
+
+public:
+    FloatingPoint calculateBezierVelocity ();
+    Hawk(FloatingPoint position, FloatingPoint velocity, Color color, double size)
+    : Bird (position, velocity, color, size) {};
+    void updateVelocity();
+    void makeFriendsAndFoes(vector<shared_ptr<Bird>> &birds);
+    virtual ~Hawk () {};
+
 };
 // END: T11
 
