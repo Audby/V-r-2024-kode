@@ -31,7 +31,7 @@ void Cell::kill() {
 // TASK
 void Cell::resurrect() {
     // BEGIN: C4
-    state = State::Dead;
+    state = State::Live;
     // END: C4
 }
 
@@ -55,25 +55,15 @@ std::istream& operator>>(std::istream& is, Cell& cell) {
 // TASK
 bool Cell::is_alive() const {
     // BEGIN: C7
-    auto s = get_value();
-    if(s==1) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return state == State::Live;
     // END: C7
 }
 
 // TASK
 char Cell::as_char() const {
     // BEGIN: C8
-    for ( auto & c: char_to_state) {
-        if (c.second == state) {
-            return c.first;
-        }
-    }
-    return 'A';
+    return chars[get_value()];
+    // END: C8
 }
 
 // TASK
@@ -113,15 +103,25 @@ Gameoflife::Gameoflife(int x_cells,
     add(steps_input);
 
     // BEGIN: G1
-    this->x_cells;
-    this->y_cells;
+
     // END: G1
+    for (int i = 0; i < y_cells; i++) {
+        get_current_grid().emplace_back();
+        for (int j = 0; j < x_cells; j++) {
+            int y_pos = i * cell_size + margin;
+            int x_pos = j * cell_size + margin;
+            // auto c = grid[current_grid][i][j];
+            get_current_grid().back().emplace_back(Point{x_pos, y_pos}, cell_size);
+        }
+    }
+    get_scratch_grid() = get_current_grid();
+    load("flower.cgol");
 }
 
 // TASK
 std::istream& operator>>(std::istream& is, Gameoflife& gameoflife) {
     // BEGIN: G2
-    for (auto &row : gameoflife.get_current_grid()) {
+    for (auto& row : gameoflife.get_current_grid()) {
         for (auto&& cell : row) {
             is >> cell;
         }
@@ -134,78 +134,136 @@ std::istream& operator>>(std::istream& is, Gameoflife& gameoflife) {
 void Gameoflife::load(const std::string& filename) {
     // BEGIN: G3
     std::ifstream ifs{filename};
+
     if (!ifs) {
-        throw std::runtime_error("Invalid" + filename);
+        throw std::runtime_error{"Could not load a Game of life state from '" + filename + "'."};
     }
-    ifs >> this*;
+    ifs >> *this;
+    step();
     // END: G3
 }
 
 // TASK
 
 void Gameoflife::drawState() {
-    // BEGIN: drawState() C2
-    
-    // END: drawState() C2
+    this->next_frame();
+    // get_scratch_grid();
+
+    for (int row = 0; row < get_current_grid().size(); ++row) {
+        for (int col = 0; col < get_current_grid().back().size(); ++col) {
+            int y_pos = row * cell_size + margin;
+            int x_pos = col * cell_size + margin;
+            if (get_current_grid()[row][col].is_alive()) {
+                draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::white);
+            } else {
+                draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::black);
+            }
+        }
+    }
 }
 
 void Gameoflife::step() {
     // BEGIN: G4
+
+    // get_scratch_grid();
+    // auto start = std::chrono::high_resolution_clock::now();
+
     for (int row = 0; row < get_current_grid().size(); ++row) {
-        for (int col = 0; col <get_current_grid().back(.size(); ++col)) {
-            auto grid_value = [row, col, this] (int x, int y) {
-                int lookup_y = ((row+y) + y_cells) % y_cells;
-                int lookup_x = ((col + x) + x_cells) % x_cells;
-                return get_current_grid()[lookup_y][lookup_x].get_value();
+        for (int col = 0; col < get_current_grid().back().size(); ++col) {
+            // How many neighbours are currently alive?
+            int live_neighbours = 0;
+            // We go through all neighbouring cells
+            for (int y = -1; y <= 1; ++y) {
+                for (int x = -1; x <= 1; ++x) {
+                    // Except the current cell
+                    if (!(x == 0 && y == 0)) {
+                        // And add the integer value of the cell's state
+                        int lookup_y = ((row + y) + y_cells) % y_cells;
+                        int lookup_x = ((col + x) + x_cells) % x_cells;
+                        live_neighbours +=
+                            get_current_grid()[lookup_y][lookup_x].get_value();
+                    }
+                }
+            }
+            int y_pos = row * cell_size + margin;
+            int x_pos = col * cell_size + margin;
+
+            if (get_current_grid()[row][col].is_alive() &&
+                (live_neighbours == 2 || live_neighbours == 3)) {
+                // 1. Any live cell with two or three live neighbours
+                // survives.
+                get_scratch_grid()[row][col].resurrect();
+                // draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::white);
+                //  Pass - keep alive
+            } else if (!get_current_grid()[row][col].is_alive() &&
+                       live_neighbours == 3) {
+                // 2. Any dead cell with three live neighbours becomes a
+                // live cell.
+                get_scratch_grid()[row][col].resurrect();
+                // draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::white);
+            } else {
+                // 3. All other live cells die in the next generation.
+                // Similarly, all other dead cells stay dead.
+                get_scratch_grid()[row][col].kill();
+                // draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::black);
             }
         }
-        int live_neighbours = grid_value(-1,-1) + grid_value(0,-1)
-        grid_value(-1, 0) /*+ grid_value(0,0)*/ + grid_value(1, 0)
-        + grid_value(-1, 1) + grid_value(0, 1) + grid_value(1, 1);
-
-        if (get_current_grid()[row][col].is_alive() &&
-            // 1. Any live cell with two or three live neighbours// survives.
-            (live_neighbours == 2 || live_neighbours == 3)) {
-            get_scratch_grid()[row][col].resurrect();
-            // Pass - keep alive
-        } else if (!get_current_grid()[row][col].is_alive() && live_neighbours == 3) {
-            // 2. Any dead cell with three live neighbours becomes a// live cell.
-            get_scratch_grid()[row][col].resurrect();
-        } else {
-            // 3. All other live cells die in the next generation.// Similarly, all other dead cells stay dead.
-            get_scratch_grid()[row][col].kill();
-            }
     }
+
+    std::swap(current_grid, scratch_grid);
+
     // END: G4
 }
 
 // TASK
 void Gameoflife::step(int steps) {
     // BEGIN: G5
-    (void)steps;
+    for (int i = 0; i < steps; i++) {
+        step();
+    }
     // END: G5
 }
 
 // TASK
 Cell* Gameoflife::cell_at_pos(Point pos) {
     // BEGIN: E1
-    (void)pos;
-    return nullptr;
+    int row = (pos.y - margin) / cell_size;
+    int col = (pos.x - margin) / cell_size;
+    std::cout << row << ", " << col << '\n';
+
+    if (row >= y_cells || col >= x_cells || pos.y - margin < 0 ||
+        pos.x - margin < 0)
+        return nullptr;
+
+    return &get_current_grid()[row][col];
     // END: E1
 }
 
 // TASK
 void Cell::toggle() {
     // BEGIN: E2
-
+    if (state == State::Live) {
+        kill();
+    } else {
+        resurrect();
+    }
     // END: E2
 }
 
 // TASK
 bool Gameoflife::toggle_cell(Point pos) {
     // BEGIN: E3
-    (void)pos;
-    return true;
+    if (auto cell = cell_at_pos(pos)) {
+        cell->toggle();
+        if (cell->get_value() == 0) {
+            draw_rectangle(cell->get_pos(), cell_size, cell_size, Color::black);
+        } else {
+            draw_rectangle(cell->get_pos(), cell_size, cell_size, Color::white);
+        }
+        return true;
+    }
+
+    return false;
     // END: E3
 }
 
@@ -277,7 +335,6 @@ void Gameoflife::save_state() {
     }
 }
 
-// Provided
 Gameoflife::Grid& Gameoflife::get_current_grid() { return grid[current_grid]; }
 Gameoflife::Grid& Gameoflife::get_scratch_grid() { return grid[scratch_grid]; }
 const Gameoflife::Grid& Gameoflife::get_current_grid() const {
@@ -287,20 +344,16 @@ const Gameoflife::Grid& Gameoflife::get_scratch_grid() const {
     return grid[scratch_grid];
 }
 
-// Provided
 void Gameoflife::alert(const std::string& message) {
     AnimationWindow::show_info_dialog(message);
 }
 
-// Provided
 int Gameoflife::click_handler(Point pos) { return toggle_cell(pos); }
 
-// Provided
 void Gameoflife::play_pause() {
     playing = !playing;
 }
 
-// Provided
 void Gameoflife::run() {
     Uint64 last_updated = 0;
     while (!should_close()) {
@@ -308,7 +361,6 @@ void Gameoflife::run() {
             click_handler(get_mouse_coordinates());
         }
         drawState();
-        next_frame();
         if (playing) {
             Uint64 current = SDL_GetTicks64();
             if (current - last_updated > animation_interval) {
@@ -319,7 +371,6 @@ void Gameoflife::run() {
     }
 }
 
-// Provided
 bool Gameoflife::left_mouse_clicked() {
     static bool was_down = false;
     bool is_down = is_left_mouse_button_down();
@@ -334,7 +385,6 @@ bool Gameoflife::left_mouse_clicked() {
     }
 }
 
-// Provided
 Gameoflife::~Gameoflife() {
     playing = false;
 }
