@@ -134,78 +134,136 @@ std::istream& operator>>(std::istream& is, Gameoflife& gameoflife) {
 void Gameoflife::load(const std::string& filename) {
     // BEGIN: G3
     std::ifstream ifs{filename};
+
     if (!ifs) {
-        throw std::runtime_error("Invalid" + filename);
+        throw std::runtime_error{"Could not load a Game of life state from '" + filename + "'."};
     }
-    ifs >> this*;
+    ifs >> *this;
+    step();
     // END: G3
 }
 
 // TASK
 
 void Gameoflife::drawState() {
-    // BEGIN: drawState() C2
-    
-    // END: drawState() C2
+    this->next_frame();
+    // get_scratch_grid();
+
+    for (int row = 0; row < get_current_grid().size(); ++row) {
+        for (int col = 0; col < get_current_grid().back().size(); ++col) {
+            int y_pos = row * cell_size + margin;
+            int x_pos = col * cell_size + margin;
+            if (get_current_grid()[row][col].is_alive()) {
+                draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::white);
+            } else {
+                draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::black);
+            }
+        }
+    }
 }
 
 void Gameoflife::step() {
     // BEGIN: G4
     for (int row = 0; row < get_current_grid().size(); ++row) {
-        for (int col = 0; col <get_current_grid().back(.size(); ++col)) {
-            auto grid_value = [row, col, this] (int x, int y) {
-                int lookup_y = ((row+y) + y_cells) % y_cells;
-                int lookup_x = ((col + x) + x_cells) % x_cells;
-                return get_current_grid()[lookup_y][lookup_x].get_value();
+        for (int col = 0; col < get_current_grid().back().size(); ++col) {
+            // How many neighbours are currently alive?
+            int live_neighbours = 0;
+            // We go through all neighbouring cells
+            for (int y = -1; y <= 1; ++y) {
+                for (int x = -1; x <= 1; ++x) {
+                    // Except the current cell
+                    if (!(x == 0 && y == 0)) {
+                        // And add the integer value of the cell's state
+                        int lookup_y = ((row + y) + y_cells) % y_cells;
+                        int lookup_x = ((col + x) + x_cells) % x_cells;
+                        live_neighbours +=
+                            get_current_grid()[lookup_y][lookup_x].get_value();
+                    }
+                }
+            }
+            int y_pos = row * cell_size + margin;
+            int x_pos = col * cell_size + margin;
+
+            if (get_current_grid()[row][col].is_alive() &&
+                (live_neighbours == 2 || live_neighbours == 3)) {
+                // 1. Any live cell with two or three live neighbours
+                // survives.
+                get_scratch_grid()[row][col].resurrect();
+                // draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::white);
+                //  Pass - keep alive
+            } else if (!get_current_grid()[row][col].is_alive() &&
+                       live_neighbours == 3) {
+                // 2. Any dead cell with three live neighbours becomes a
+                // live cell.
+                get_scratch_grid()[row][col].resurrect();
+                // draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::white);
+            } else {
+                // 3. All other live cells die in the next generation.
+                // Similarly, all other dead cells stay dead.
+                get_scratch_grid()[row][col].kill();
+                // draw_rectangle({x_pos, y_pos}, cell_size, cell_size, Color::black);
             }
         }
-        int live_neighbours = grid_value(-1,-1) + grid_value(0,-1)
-        grid_value(-1, 0) /*+ grid_value(0,0)*/ + grid_value(1, 0)
-        + grid_value(-1, 1) + grid_value(0, 1) + grid_value(1, 1);
-
-        if (get_current_grid()[row][col].is_alive() &&
-            // 1. Any live cell with two or three live neighbours// survives.
-            (live_neighbours == 2 || live_neighbours == 3)) {
-            get_scratch_grid()[row][col].resurrect();
-            // Pass - keep alive
-        } else if (!get_current_grid()[row][col].is_alive() && live_neighbours == 3) {
-            // 2. Any dead cell with three live neighbours becomes a// live cell.
-            get_scratch_grid()[row][col].resurrect();
-        } else {
-            // 3. All other live cells die in the next generation.// Similarly, all other dead cells stay dead.
-            get_scratch_grid()[row][col].kill();
-            }
     }
+
+    std::swap(current_grid, scratch_grid);
     // END: G4
 }
 
 // TASK
 void Gameoflife::step(int steps) {
     // BEGIN: G5
-    (void)steps;
+    for (int i = 0; i < steps; i++) {
+        step();
+    }
     // END: G5
 }
 
 // TASK
 Cell* Gameoflife::cell_at_pos(Point pos) {
     // BEGIN: E1
-    (void)pos;
-    return nullptr;
+    int row = (pos.y - margin) / cell_size;
+    int col = (pos.x - margin) / cell_size;
+    std::cout << row << ", " << col << '\n';
+
+    if (row >= y_cells || row < y_cells || col >= x_cells || col < x_cells) {
+        return nullptr;
+    }
+
+    return &get_current_grid()[row][col];
     // END: E1
 }
 
 // TASK
 void Cell::toggle() {
     // BEGIN: E2
-
+    if (get_value() == 1) {
+        kill();
+    }
+    else {
+        resurrect();
+    }
     // END: E2
 }
 
 // TASK
 bool Gameoflife::toggle_cell(Point pos) {
     // BEGIN: E3
-    (void)pos;
-    return true;
+    Cell* currentCell = cell_at_pos(pos);
+    auto currentState = currentCell->is_alive();
+    currentCell->toggle();
+    if (currentCell -> is_alive() == currentState) {
+        return false;
+    }
+    else {
+        if (currentCell->is_alive() == true) {
+            draw_rectangle(currentCell->get_pos(), cell_size, cell_size, Color::black);
+        }
+        else {
+                        draw_rectangle(currentCell->get_pos(), cell_size, cell_size, Color::white);
+        }
+        return true;
+    }
     // END: E3
 }
 
