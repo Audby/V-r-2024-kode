@@ -189,10 +189,9 @@ Tile::Tile(const Tile &other) : id{other.id}, walkable{other.walkable}, image{ot
 Tile &Tile::operator=(const Tile &other)
 {
 // BEGIN: T10
-//
-// Write your answer to assignment T10 here, between the // BEGIN: T10
-// and // END: T10 comments. You should remove any code that is
-// already there and replace it with your own.
+    this->id = other.id;
+    this->walkable = other.walkable;
+    this->image = other.image;
     return *this;
 // END: T10
 }
@@ -203,12 +202,17 @@ Tile &Tile::operator=(const Tile &other)
 TileDescriptor TileLoader::process_line(std::string line)
 {
 // BEGIN: T11
-//
-// Write your answer to assignment T11 here, between the // BEGIN: T11
-// and // END: T11 comments. You should remove any code that is
-// already there and replace it with your own.
-    static int current_id = 0;
-    return TileDescriptor{current_id++, "house_00.png", true};
+    std::istringstream ss{line};
+    std::getline(ss, line);
+
+    int id;
+    std::string filename;
+    bool walkable;
+
+    ss >> id >> filename >> walkable;
+    TileDescriptor result{id, filename, walkable};
+    return result;
+    
 // END: T11
 }
 
@@ -221,10 +225,32 @@ TilePool TileLoader::load(const std::filesystem::path descriptor_file_path)
     auto imgpool = TilePool{};
 
 // BEGIN: T12
+    std::ifstream file{descriptor_file_path};
+
+    if(!file) {
+        throw std::runtime_error("Invalid");
+    }
+    //std::istringstream ss{};
+    std::string current_line;
+
+    while (std::getline(file, current_line)) {
+        auto line_content = process_line(current_line);
+        auto id = line_content.id;
+        auto filename = line_content.filename;
+        auto walkable = line_content.walkable;
+
+        Tile newTile{id,static_cast<bool>(walkable), filename};
+        imgpool.add_tile(id, newTile);
+    }
+    return imgpool;
+/*
 //
 // Write your answer to assignment T12 here, between the // BEGIN: T12
 // and // END: T12 comments. You should remove any code that is
 // already there and replace it with your own.
+
+
+
     imgpool.add_tile(0, Tile(0, false, "tiles/house_00.png"));
     imgpool.add_tile(1, Tile(1, false, "tiles/house_01.png"));
     imgpool.add_tile(2, Tile(2, false, "tiles/house_02.png"));
@@ -236,6 +262,7 @@ TilePool TileLoader::load(const std::filesystem::path descriptor_file_path)
     // imgpool.tile_ids.push_back(50);
 
     return imgpool;
+    */
 // END: T12
 }
 
@@ -258,11 +285,30 @@ bool LevelWriter::write(std::filesystem::path path, const Level &level)
     };
 
 // BEGIN: T13
-//
-// Write your answer to assignment T13 here, between the // BEGIN: T13
-// and // END: T13 comments. You should remove any code that is
-// already there and replace it with your own.
-    return false;
+    std::ofstream ofs{path};
+
+    if (!ofs.is_open()) {
+        return false;
+    }
+
+    std::istringstream ss;
+    ofs << width << "\t" << height << std::endl;
+    for (int line = 0; line < height; line++) {
+        for (int col = 0; col < width; col++) {
+            ofs << tile_at(height, width) << "\t" << std::endl;
+        }
+        ofs << std::endl;
+    }
+    ofs << "End" << std::endl;
+    for (int line = 0; line < height; line++) {
+        for (int col = 0; col < width; col++) {
+            ofs << (walkable_at(height, width) ? "1" : "0") << "\t" << std::endl;
+        }
+    }
+    ofs << "End" << std::endl;
+
+    return true;
+
 // END: T13
 }
 
